@@ -1,0 +1,172 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Uya",
+  "scopeName": "source.uya",
+  "fileTypes": ["uya"],
+  "patterns": [
+    { "include": "#shebang" },
+    { "include": "#comments" },
+    { "include": "#attributes" },
+    { "include": "#strings" },
+    { "include": "#characters" },
+    { "include": "#numbers" },
+    { "include": "#keywords" },
+    { "include": "#types" },
+    { "include": "#functions" },
+    { "include": "#constants" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "shebang": {
+      "match": "\\A#!.*$",
+      "name": "comment.line.number-sign.shebang.uya"
+    },
+    "comments": {
+      "patterns": [
+        {
+          "begin": "/\\*",
+          "end": "\\*/",
+          "name": "comment.block.uya"
+        },
+        {
+          "match": "//.*$",
+          "name": "comment.line.double-slash.uya"
+        }
+      ]
+    },
+    "attributes": {
+      "comment": "Builtin and declaration attributes: @size_of, @async_fn, @align(64), @vector.splat",
+      "patterns": [
+        {
+          "match": "(@)([A-Za-z_][A-Za-z0-9_]*)(\\.[A-Za-z_][A-Za-z0-9_]*)?",
+          "captures": {
+            "1": { "name": "punctuation.definition.annotation.uya" },
+            "2": { "name": "support.function.builtin.uya" },
+            "3": { "name": "support.function.builtin.uya" }
+          }
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.backtick.uya",
+          "begin": "`",
+          "end": "`",
+          "comment": "Raw string literal: no escapes, no interpolation"
+        },
+        {
+          "name": "string.quoted.double.uya",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.uya",
+              "match": "\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|[nrt0\\\\\"'`])"
+            },
+            {
+              "name": "meta.interpolation.uya",
+              "begin": "\\$\\{",
+              "end": "\\}",
+              "beginCaptures": {
+                "0": { "name": "punctuation.section.interpolation.begin.uya" }
+              },
+              "endCaptures": {
+                "0": { "name": "punctuation.section.interpolation.end.uya" }
+              },
+              "patterns": [
+                { "include": "$self" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "characters": {
+      "name": "string.quoted.single.uya",
+      "match": "'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|[nrt0\\\\\"'`])|[^'\\\\])'",
+      "captures": {
+        "1": { "name": "constant.character.escape.uya" }
+      }
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "comment": "Float with optional type suffix",
+          "match": "\\b(?:\\d(?:_?\\d)*\\.\\d(?:_?\\d)*(?:[eE][-+]?\\d+)?|\\.\\d(?:_?\\d)*)(?:f32|f64)?\\b",
+          "name": "constant.numeric.float.uya"
+        },
+        {
+          "comment": "Integer in decimal/hex/octal/binary with optional type suffix",
+          "match": "\\b(?:0[xX][0-9A-Fa-f](?:_?[0-9A-Fa-f])*|0[oO][0-7](?:_?[0-7])*|0[bB][01](?:_?[01])*|\\d(?:_?\\d)*)(?:i8|i16|i32|i64|u8|u16|u32|u64|usize)?\\b",
+          "name": "constant.numeric.integer.uya"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "\\b(?:if|else|while|for|match|break|continue|return|try|catch|defer|errdefer|as)\\b",
+          "name": "keyword.control.uya"
+        },
+        {
+          "match": "\\b(?:fn|struct|union|interface|enum|error|type|use|export|extern|opaque|mc|test)\\b",
+          "name": "storage.type.uya"
+        },
+        {
+          "match": "\\b(?:const|var|atomic)\\b",
+          "name": "storage.modifier.uya"
+        },
+        {
+          "match": "\\b(?:true|false)\\b",
+          "name": "constant.language.boolean.uya"
+        },
+        {
+          "match": "\\b(?:null)\\b",
+          "name": "constant.language.null.uya"
+        },
+        {
+          "match": "\\b(?:self)\\b",
+          "name": "variable.language.self.uya"
+        },
+        {
+          "match": "\\b(?:Self|void|bool|i8|i16|i32|i64|u8|u16|u32|u64|usize|f32|f64|byte)\\b",
+          "name": "support.type.primitive.uya"
+        }
+      ]
+    },
+    "types": {
+      "comment": "User-defined type names are Capitalised by convention",
+      "match": "\\b[A-Z][A-Za-z0-9_]*\\b",
+      "name": "entity.name.type.uya"
+    },
+    "functions": {
+      "patterns": [
+        {
+          "match": "\\b(fn)(\\s+)([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.type.function.uya" },
+            "3": { "name": "entity.name.function.uya" }
+          }
+        }
+      ]
+    },
+    "constants": {
+      "match": "\\b[A-Z][A-Z0-9_]{2,}\\b",
+      "name": "constant.other.caps.uya"
+    },
+    "operators": {
+      "patterns": [
+        {
+          "comment": "Wrapping/saturating integer operators and pipeline",
+          "match": "\\+\\||-\\||\\*\\||\\+%|-%|\\*%|\\|>|=>|\\.\\.|->",
+          "name": "keyword.operator.uya"
+        },
+        {
+          "match": "===|!==|==|!=|<=|>=|&&|\\|\\||[-+*/%<>=!&|^~?:]",
+          "name": "keyword.operator.uya"
+        }
+      ]
+    }
+  }
+}

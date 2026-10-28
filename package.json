@@ -1,0 +1,45 @@
+{
+  "name": "uya-tmlanguage",
+  "displayName": "Uya",
+  "description": "TextMate grammar for the Uya programming language",
+  "version": "0.1.0",
+  "license": "MIT",
+  "publisher": "uya-lang",
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "uya",
+    "syntax-highlighting",
+    "textmate",
+    "linguist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uya-lang/uya-tmLanguage"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "uya",
+        "aliases": [
+          "Uya",
+          "uya"
+        ],
+        "extensions": [
+          ".uya"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "uya",
+        "scopeName": "source.uya",
+        "path": "./syntaxes/uya.tmLanguage.json"
+      }
+    ]
+  }
+}
